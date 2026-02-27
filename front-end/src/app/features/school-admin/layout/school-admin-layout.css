@@ -1,0 +1,22 @@
+.school-admin-layout {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+app-sidebar{
+  width: 16%;
+  min-height: 100%;
+}
+.layout-body {
+  flex: 1;
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #f7f8fc;
+  overflow-y: auto;
+}

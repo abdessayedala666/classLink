@@ -1,0 +1,13 @@
+.page-container {
+  padding: 24px;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.page-description {
+  color: #4a5568;
+}

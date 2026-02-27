@@ -1,0 +1,19 @@
+.home-container {
+  padding: 24px;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px 24px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: #1a1a2e;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 1.125rem;
+  color: #4a5568;
+}

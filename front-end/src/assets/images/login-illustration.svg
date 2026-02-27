@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <!-- Background elements -->
+  <circle cx="200" cy="150" r="120" fill="rgba(255,255,255,0.1)"/>
+  <circle cx="200" cy="150" r="80" fill="rgba(255,255,255,0.15)"/>
+  
+  <!-- Book/Learning icon -->
+  <rect x="130" y="100" width="140" height="100" rx="8" fill="white" opacity="0.9"/>
+  <rect x="145" y="115" width="50" height="6" rx="3" fill="#667eea"/>
+  <rect x="145" y="130" width="110" height="4" rx="2" fill="#a0aec0"/>
+  <rect x="145" y="142" width="90" height="4" rx="2" fill="#a0aec0"/>
+  <rect x="145" y="154" width="100" height="4" rx="2" fill="#a0aec0"/>
+  <rect x="145" y="166" width="70" height="4" rx="2" fill="#a0aec0"/>
+  
+  <!-- Graduation cap -->
+  <path d="M200 70 L250 90 L200 110 L150 90 Z" fill="white"/>
+  <rect x="195" y="95" width="10" height="20" fill="white"/>
+  <circle cx="200" cy="115" r="5" fill="#667eea"/>
+  
+  <!-- People icons -->
+  <circle cx="100" cy="200" r="15" fill="rgba(255,255,255,0.8)"/>
+  <rect x="85" y="220" width="30" height="35" rx="5" fill="rgba(255,255,255,0.8)"/>
+  
+  <circle cx="300" cy="200" r="15" fill="rgba(255,255,255,0.8)"/>
+  <rect x="285" y="220" width="30" height="35" rx="5" fill="rgba(255,255,255,0.8)"/>
+  
+  <!-- Connection lines -->
+  <line x1="115" y1="210" x2="170" y2="180" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-dasharray="4"/>
+  <line x1="285" y1="210" x2="230" y2="180" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-dasharray="4"/>
+</svg>
