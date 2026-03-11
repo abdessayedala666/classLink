@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-grades',
@@ -9,4 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './grades.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class Grades {}
+
+export class Grades {
+
+}

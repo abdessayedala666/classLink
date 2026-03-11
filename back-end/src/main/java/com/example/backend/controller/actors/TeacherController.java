@@ -4,9 +4,11 @@ import com.example.backend.models.Teacher;
 import com.example.backend.services.TeacherService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/teachers")
@@ -17,6 +19,16 @@ public class TeacherController {
     public TeacherController(TeacherService teacherService) {
         this.teacherService = teacherService;
     }
+
+    @PreAuthorize("hasRole('SCHOOL_ADMIN')")
+    @PostMapping("/{teacherId}/subject/{subjectId}")
+    public ResponseEntity<Map<String , String>> assignSubjectToTeacher(@PathVariable Long teacherId, @PathVariable Long subjectId) {
+
+        teacherService.assignSubjectToTeacher(teacherId, subjectId);
+
+        return ResponseEntity.ok(Map.of("message", "Subject assigned to teacher successfully"));
+    }
+
 
     @GetMapping
     public ResponseEntity<List<Teacher>> getAllTeachers() {

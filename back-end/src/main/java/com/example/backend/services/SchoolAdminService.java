@@ -81,13 +81,13 @@ public class SchoolAdminService {
         schoolAdmin.setUser(savedUser);
         schoolAdmin.setSchool(school);
 
-        schoolAdminRepository.save(schoolAdmin);
+        SchoolAdmin savedSchoolAdmin = schoolAdminRepository.save(schoolAdmin);
 
         // Register relationship in SpiceDB - if this fails, rollback everything
         try {
             boolean spiceDBSuccess = spiceDBAuthorizationService.makeRelationship(
                     "schooladmin",
-                    savedUser.getId().toString(),
+                    savedSchoolAdmin.getId().toString(),
                     "manager",
                     "school",
                     school.getId().toString()

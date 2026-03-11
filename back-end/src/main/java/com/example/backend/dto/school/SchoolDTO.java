@@ -1,5 +1,7 @@
 package com.example.backend.dto.school;
 
+import com.example.backend.models.School;
+
 public class SchoolDTO {
 
     private Long id;
@@ -9,10 +11,10 @@ public class SchoolDTO {
     // Constructors
     public SchoolDTO() {}
 
-    public SchoolDTO(Long id, String name, String address) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
+    public SchoolDTO(School school) {
+        this.id = school.getId();
+        this.name = school.getName();
+        this.address = school.getAddress();
     }
 
     // Getters and Setters

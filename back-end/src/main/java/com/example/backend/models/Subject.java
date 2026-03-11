@@ -19,7 +19,7 @@ public class Subject {
     private Classroom classroom;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id", unique = true)
+    @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
     @OneToMany(mappedBy = "subject")

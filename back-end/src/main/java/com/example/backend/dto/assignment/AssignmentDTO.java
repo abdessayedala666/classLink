@@ -2,54 +2,38 @@ package com.example.backend.dto.assignment;
 
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class AssignmentDTO {
-
-    private Long id;
-    private Long classroomId;
-    private Long teacherId;
-    private Long subjectId;
+    
+    @NotBlank(message = "File is required")
+    private String fileUrl;
+    @NotBlank(message = "File name is required")
     private String fileName;
+
+    @NotNull(message = "Subject ID is required")
+    private Long subjectId;
+
+    @NotBlank(message = "Description is required")
     private String description;
+
+    @NotNull(message = "Deadline is required")
+    @Future(message = "Deadline must be in the future")
     private LocalDateTime deadline;
-    private LocalDateTime createdAt;
 
-    // Constructors
-    public AssignmentDTO() {}
 
-    public AssignmentDTO(Long id, Long classroomId, Long teacherId, Long subjectId, String fileName, String description, LocalDateTime deadline, LocalDateTime createdAt) {
-        this.id = id;
-        this.classroomId = classroomId;
-        this.teacherId = teacherId;
-        this.subjectId = subjectId;
-        this.fileName = fileName;
-        this.description = description;
-        this.deadline = deadline;
-        this.createdAt = createdAt;
+
+
+    public String getFileUrl() {
+        return fileUrl;
     }
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getClassroomId() {
-        return classroomId;
-    }
-
-    public void setClassroomId(Long classroomId) {
-        this.classroomId = classroomId;
-    }
-
-    public Long getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 
     public Long getSubjectId() {
@@ -68,6 +52,7 @@ public class AssignmentDTO {
         this.fileName = fileName;
     }
 
+
     public String getDescription() {
         return description;
     }
@@ -83,12 +68,7 @@ public class AssignmentDTO {
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
+}    
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+  
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-}

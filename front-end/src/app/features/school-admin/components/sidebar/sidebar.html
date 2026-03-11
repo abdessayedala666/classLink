@@ -1,4 +1,8 @@
 <aside class="sidebar">
+  <div class="school" *ngIf= "school$ | async as school">
+    <h2 class="name">{{school.name}}</h2>
+    <p class="address">{{school.address}}</p>
+  </div>
 
     <nav>
       <a

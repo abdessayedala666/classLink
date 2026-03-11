@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface GradeRepository extends JpaRepository<Grade, Long> {
     List<Grade> findBySchoolId(Long schoolId);
+
+    boolean existsByNameAndSchoolId(String trim, Long id);
 }

@@ -1,21 +1,31 @@
 package com.example.backend.controller.actors;
 
+import com.example.backend.dto.teacher.TeacherDTO;
 import com.example.backend.models.SchoolAdmin;
 import com.example.backend.services.SchoolAdminService;
+import com.example.backend.services.TeacherService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
+@PreAuthorize("hasRole('SCHOOL_ADMIN')") 
 @RestController
 @RequestMapping("/api/school-admins")
 public class SchoolAdminController {
 
     private final SchoolAdminService schoolAdminService;
+    private final TeacherService teacherService ;
 
-    public SchoolAdminController(SchoolAdminService schoolAdminService) {
+    public SchoolAdminController(SchoolAdminService schoolAdminService ,
+                                TeacherService teacherService   
+    ) {
         this.schoolAdminService = schoolAdminService;
+        this.teacherService = teacherService ;
     }
 
     @GetMapping
@@ -41,6 +51,11 @@ public class SchoolAdminController {
     public ResponseEntity<List<SchoolAdmin>> getSchoolAdminsBySchoolId(@PathVariable Long schoolId) {
         return ResponseEntity.ok(schoolAdminService.findBySchoolId(schoolId));
     }
+    @GetMapping("/teachers")
+    public List<TeacherDTO> getTeachersBySchool() {
+        return teacherService.getTeachersBySchool();
+    }
+    
 
     @PostMapping
     public ResponseEntity<SchoolAdmin> createSchoolAdmin(@RequestBody SchoolAdmin schoolAdmin) {

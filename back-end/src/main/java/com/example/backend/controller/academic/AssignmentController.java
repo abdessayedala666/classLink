@@ -1,12 +1,18 @@
 package com.example.backend.controller.academic;
 
+import com.example.backend.dto.assignment.AssignmentDTO;
+import com.example.backend.dto.assignment.AssignmentUploadDTO;
 import com.example.backend.models.Assignment;
 import com.example.backend.services.AssignmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
+
 
 @RestController
 @RequestMapping("/api/assignments")
@@ -18,47 +24,32 @@ public class AssignmentController {
         this.assignmentService = assignmentService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Assignment>> getAllAssignments() {
-        return ResponseEntity.ok(assignmentService.findAll());
-    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Assignment> getAssignmentById(@PathVariable Long id) {
-        return assignmentService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping()
+    public ResponseEntity<Map<String, String>> uploadAssignment( @ModelAttribute AssignmentUploadDTO asignmentUploadDTO) {
+        try {
+            assignmentService.uploadAssignmentFile(asignmentUploadDTO.getFile(), asignmentUploadDTO.getSubjectId(), asignmentUploadDTO.getDeadline(), asignmentUploadDTO.getDescription());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Failed to upload assignment"));
+        }
+        return ResponseEntity.ok().body(Map.of("message", "Assignment uploaded successfully"));
     }
+    
 
-    @GetMapping("/classroom/{classroomId}")
-    public ResponseEntity<List<Assignment>> getAssignmentsByClassroomId(@PathVariable Long classroomId) {
-        return ResponseEntity.ok(assignmentService.findByClassroomId(classroomId));
-    }
 
-    @GetMapping("/teacher/{teacherId}")
-    public ResponseEntity<List<Assignment>> getAssignmentsByTeacherId(@PathVariable Long teacherId) {
-        return ResponseEntity.ok(assignmentService.findByTeacherId(teacherId));
-    }
+
+
+
 
     @GetMapping("/subject/{subjectId}")
-    public ResponseEntity<List<Assignment>> getAssignmentsBySubjectId(@PathVariable Long subjectId) {
-        return ResponseEntity.ok(assignmentService.findBySubjectId(subjectId));
+    public ResponseEntity<List<AssignmentDTO>> getAssignmentsBySubjectId(@PathVariable Long subjectId) {
+        return ResponseEntity.ok(assignmentService.findAssignmentBySubjectId(subjectId)) ;
     }
 
-    @PostMapping
-    public ResponseEntity<Assignment> createAssignment(@RequestBody Assignment assignment) {
-        Assignment savedAssignment = assignmentService.save(assignment);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedAssignment);
-    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Assignment> updateAssignment(@PathVariable Long id, @RequestBody Assignment assignment) {
-        if (!assignmentService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        assignment.setId(id);
-        return ResponseEntity.ok(assignmentService.save(assignment));
-    }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAssignment(@PathVariable Long id) {

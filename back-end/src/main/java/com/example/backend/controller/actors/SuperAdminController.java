@@ -1,6 +1,8 @@
 package com.example.backend.controller.actors;
 
+import com.example.backend.dto.school.SchoolDTO;
 import com.example.backend.models.SuperAdmin;
+import com.example.backend.services.SchoolService;
 import com.example.backend.services.SuperAdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +14,16 @@ import java.util.List;
 @RequestMapping("/api/super-admins")
 public class SuperAdminController {
 
+    private final SchoolService schoolService;
+
     private final SuperAdminService superAdminService;
 
-    public SuperAdminController(SuperAdminService superAdminService) {
+    public SuperAdminController(SuperAdminService superAdminService, SchoolService schoolService) {
         this.superAdminService = superAdminService;
+        this.schoolService = schoolService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<SuperAdmin>> getAllSuperAdmins() {
-        return ResponseEntity.ok(superAdminService.findAll());
-    }
+  
 
     @GetMapping("/{id}")
     public ResponseEntity<SuperAdmin> getSuperAdminById(@PathVariable Long id) {

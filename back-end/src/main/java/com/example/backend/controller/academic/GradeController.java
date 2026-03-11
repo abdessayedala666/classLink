@@ -1,15 +1,21 @@
 package com.example.backend.controller.academic;
 
+import com.example.backend.dto.grade.CreateGradeRequest;
+import com.example.backend.dto.grade.GradeDTO;
 import com.example.backend.models.Grade;
 import com.example.backend.services.GradeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
-@RequestMapping("/api/grades")
+@RequestMapping("/api/school/grades")
 public class GradeController {
 
     private final GradeService gradeService;
@@ -18,9 +24,21 @@ public class GradeController {
         this.gradeService = gradeService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Grade>> getAllGrades() {
-        return ResponseEntity.ok(gradeService.findAll());
+
+    @PreAuthorize("hasRole('SCHOOL_ADMIN')")
+    @PostMapping
+    public ResponseEntity<Map<String , String>> createGrade(@Valid @RequestBody CreateGradeRequest request) {
+        gradeService.createGrade(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Grade created successfully"));
+    }
+    
+    
+
+    @PreAuthorize("hasRole('SCHOOL_ADMIN')")
+    @GetMapping("")
+    public ResponseEntity<List<GradeDTO>> getAllGrades() {
+
+        return ResponseEntity.ok(gradeService.getGrades());
     }
 
     @GetMapping("/{id}")
@@ -33,12 +51,6 @@ public class GradeController {
     @GetMapping("/school/{schoolId}")
     public ResponseEntity<List<Grade>> getGradesBySchoolId(@PathVariable Long schoolId) {
         return ResponseEntity.ok(gradeService.findBySchoolId(schoolId));
-    }
-
-    @PostMapping
-    public ResponseEntity<Grade> createGrade(@RequestBody Grade grade) {
-        Grade savedGrade = gradeService.save(grade);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedGrade);
     }
 
     @PutMapping("/{id}")

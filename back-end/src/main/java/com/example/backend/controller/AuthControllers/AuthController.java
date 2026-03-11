@@ -5,20 +5,30 @@ import com.example.backend.dto.auth.LoginDTO;
 import com.example.backend.dto.auth.LoginResponseDTO;
 import com.example.backend.dto.auth.UserLoginDTO;
 import com.example.backend.dto.auth.UserRegisterDTO;
+import com.example.backend.dto.user.BulkUserCreationRequestDTO;
+import com.example.backend.dto.user.BulkUserCreationResponseDTO;
 import com.example.backend.security.CustomUserDetails;
 import com.example.backend.services.AuthService;
 import com.example.backend.services.SchoolAdminService;
+import com.example.backend.services.TeacherService;
+import com.example.backend.services.UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
+
+import org.springframework.web.multipart.MultipartFile;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,10 +36,14 @@ public class AuthController {
 
     private final AuthService authService;
     private final SchoolAdminService schoolAdminService;
+    private final TeacherService teacherService;
+    private final UserService userService;
 
-    public AuthController(AuthService authService, SchoolAdminService schoolAdminService) {
+    public AuthController(AuthService authService, SchoolAdminService schoolAdminService, TeacherService teacherService, UserService userService) {
         this.authService = authService;
         this.schoolAdminService = schoolAdminService;
+        this.teacherService = teacherService;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -87,4 +101,20 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(registeredUser) ;
     }
+
+    @PreAuthorize("hasRole('SCHOOL_ADMIN')")
+    @PostMapping("register/teachers")
+    public ResponseEntity<UserLoginDTO> registerTeacher(@Valid @RequestBody UserRegisterDTO userRegisterDTO) {
+        UserLoginDTO registeredUser = teacherService.registerTeacher(userRegisterDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(registeredUser);
+    }
+    @PreAuthorize("hasRole('SCHOOL_ADMIN')")
+    @PostMapping("/register/users/import")
+    public List<BulkUserCreationResponseDTO> importTeacherFromExcel(@ModelAttribute BulkUserCreationRequestDTO requestDTO) {
+        List<BulkUserCreationResponseDTO> response = userService.importTeachersFromExcel(requestDTO);        
+        return response;
+    }
+    
+    
 }

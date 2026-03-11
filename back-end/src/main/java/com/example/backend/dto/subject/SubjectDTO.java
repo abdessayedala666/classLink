@@ -1,20 +1,19 @@
 package com.example.backend.dto.subject;
 
+import com.example.backend.models.Subject;
+
 public class SubjectDTO {
 
     private Long id;
     private String name;
-    private Long classroomId;
-    private Long teacherId;
+
 
     // Constructors
     public SubjectDTO() {}
 
-    public SubjectDTO(Long id, String name, Long classroomId, Long teacherId) {
-        this.id = id;
-        this.name = name;
-        this.classroomId = classroomId;
-        this.teacherId = teacherId;
+    public SubjectDTO(Subject subject ) {
+        this.id = subject.getId();
+        this.name = subject.getName();
     }
 
     // Getters and Setters
@@ -34,19 +33,4 @@ public class SubjectDTO {
         this.name = name;
     }
 
-    public Long getClassroomId() {
-        return classroomId;
-    }
-
-    public void setClassroomId(Long classroomId) {
-        this.classroomId = classroomId;
-    }
-
-    public Long getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
-    }
 }

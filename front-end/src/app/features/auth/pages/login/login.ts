@@ -16,6 +16,7 @@ export class Login {
   loginForm: FormGroup;
   isLoading = false;
   errorMessage = '';
+  showPassword = false ;
 
   ngOnInit(): void {
     this.authService.isAuthenticated$.subscribe(isAuth => {
@@ -35,6 +36,10 @@ export class Login {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+  }
+  togglePasswordVisibility() : void{
+    this.showPassword = !this.showPassword ;
+    
   }
 
   onSubmit(): void {

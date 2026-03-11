@@ -1,5 +1,7 @@
 package com.example.backend.dto.grade;
 
+import com.example.backend.models.Grade;
+
 public class GradeDTO {
 
     private Long id;
@@ -9,10 +11,9 @@ public class GradeDTO {
     // Constructors
     public GradeDTO() {}
 
-    public GradeDTO(Long id, String name, Long schoolId) {
-        this.id = id;
-        this.name = name;
-        this.schoolId = schoolId;
+    public GradeDTO(Grade grade) {
+        this.id = grade.getId();
+        this.name = grade.getName();
     }
 
     // Getters and Setters
@@ -32,11 +33,5 @@ public class GradeDTO {
         this.name = name;
     }
 
-    public Long getSchoolId() {
-        return schoolId;
-    }
 
-    public void setSchoolId(Long schoolId) {
-        this.schoolId = schoolId;
-    }
 }

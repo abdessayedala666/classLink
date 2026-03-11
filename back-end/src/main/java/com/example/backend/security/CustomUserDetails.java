@@ -21,7 +21,7 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Return the user's role as a GrantedAuthority with ROLE_ prefix
         return Collections.singletonList(
-            new SimpleGrantedAuthority(user.getRole().name())
+            new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
         );
     }
 

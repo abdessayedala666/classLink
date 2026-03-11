@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 @Entity
 @Table(name = "assignment")
 public class Assignment {
@@ -12,11 +14,7 @@ public class Assignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long classroomId;
 
-    @Column(nullable = false)
-    private Long teacherId;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
@@ -30,6 +28,8 @@ public class Assignment {
     @Column(nullable = false)
     private LocalDateTime deadline;
 
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "assignment")
@@ -38,9 +38,8 @@ public class Assignment {
     // Constructors
     public Assignment() {}
 
-    public Assignment(Long classroomId, Long teacherId, String fileName, LocalDateTime deadline) {
-        this.classroomId = classroomId;
-        this.teacherId = teacherId;
+    public Assignment(String fileName, LocalDateTime deadline) {
+
         this.fileName = fileName;
         this.deadline = deadline;
     }
@@ -54,21 +53,7 @@ public class Assignment {
         this.id = id;
     }
 
-    public Long getClassroomId() {
-        return classroomId;
-    }
 
-    public void setClassroomId(Long classroomId) {
-        this.classroomId = classroomId;
-    }
-
-    public Long getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
-    }
 
     public Subject getSubject() {
         return subject;

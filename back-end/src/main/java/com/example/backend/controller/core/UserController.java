@@ -1,5 +1,6 @@
 package com.example.backend.controller.core;
 
+import com.example.backend.dto.user.UserUpdateDTO;
 import com.example.backend.models.User;
 import com.example.backend.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,11 @@ public class UserController {
         }
         user.setId(id);
         return ResponseEntity.ok(userService.save(user));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<User> patchUser(@PathVariable Long id, @RequestBody UserUpdateDTO userUpdateDTO) {
+        return ResponseEntity.ok(userService.patchUser(id, userUpdateDTO));
     }
 
     @DeleteMapping("/{id}")

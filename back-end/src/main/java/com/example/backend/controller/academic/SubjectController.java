@@ -2,14 +2,23 @@ package com.example.backend.controller.academic;
 
 import com.example.backend.models.Subject;
 import com.example.backend.services.SubjectService;
+import com.example.backend.dto.subject.CreateSubjectDTO;
+import com.example.backend.dto.subject.SubjectDTO;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+
+
+
 
 @RestController
-@RequestMapping("/api/subjects")
+@RequestMapping("/api/classrooms")
 public class SubjectController {
 
     private final SubjectService subjectService;
@@ -18,51 +27,27 @@ public class SubjectController {
         this.subjectService = subjectService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Subject>> getAllSubjects() {
-        return ResponseEntity.ok(subjectService.findAll());
+    @PostMapping("/{classroomId}/subjects")
+    public ResponseEntity<Map<String , String>> createSubject(@PathVariable Long classroomId , @Valid @RequestBody CreateSubjectDTO request ) {
+        request.setClassroomId(classroomId);
+        subjectService.createSubject(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Subject created successfully"));    
     }
+    @GetMapping("/{classroomId}/subjects")
+    public ResponseEntity<List<SubjectDTO>> getSubjectsByClassroomId(@PathVariable Long classroomId) {
+        return ResponseEntity.ok(subjectService.getSubjectsByClassroomId(classroomId));
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Subject> getSubjectById(@PathVariable Long id) {
-        return subjectService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
     }
+    
+    @PostMapping("/subjects/{subjectId}/teachers/{teacherId}")
+    public ResponseEntity<Map<String , String>> assignTeacherToSubject(@PathVariable Long teacherId  , 
+                                                                        @PathVariable Long subjectId
+                                                                        ) {
+        subjectService.assignTeacherToSubject(teacherId , subjectId) ; 
+        return ResponseEntity.ok(Map.of("message", "Teacher assigned to subject successfully"));                                                                  
 
-    @GetMapping("/classroom/{classroomId}")
-    public ResponseEntity<List<Subject>> getSubjectsByClassroomId(@PathVariable Long classroomId) {
-        return ResponseEntity.ok(subjectService.findByClassroomId(classroomId));
+        
     }
-
-    @GetMapping("/teacher/{teacherId}")
-    public ResponseEntity<Subject> getSubjectByTeacherId(@PathVariable Long teacherId) {
-        return subjectService.findByTeacherId(teacherId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    @PostMapping
-    public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) {
-        Subject savedSubject = subjectService.save(subject);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedSubject);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Subject> updateSubject(@PathVariable Long id, @RequestBody Subject subject) {
-        if (!subjectService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        subject.setId(id);
-        return ResponseEntity.ok(subjectService.save(subject));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
-        if (!subjectService.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        subjectService.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
+    
+    
 }

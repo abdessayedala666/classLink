@@ -1,5 +1,7 @@
 package com.example.backend.controller.academic;
 
+import com.example.backend.dto.classroom.ClassroomDTO;
+import com.example.backend.dto.classroom.CreateClassroomRequest;
 import com.example.backend.models.Classroom;
 import com.example.backend.services.ClassroomService;
 import org.springframework.http.HttpStatus;
@@ -7,9 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/classrooms")
+@RequestMapping("/api/grades")
 public class ClassroomController {
 
     private final ClassroomService classroomService;
@@ -18,10 +21,7 @@ public class ClassroomController {
         this.classroomService = classroomService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Classroom>> getAllClassrooms() {
-        return ResponseEntity.ok(classroomService.findAll());
-    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Classroom> getClassroomById(@PathVariable Long id) {
@@ -30,15 +30,16 @@ public class ClassroomController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/grade/{gradeId}")
-    public ResponseEntity<List<Classroom>> getClassroomsByGradeId(@PathVariable Long gradeId) {
-        return ResponseEntity.ok(classroomService.findByGradeId(gradeId));
+    @GetMapping("{gradeId}/classrooms")
+    public ResponseEntity<List<ClassroomDTO>> getClassroomsByGradeId(@PathVariable Long gradeId) {
+        return ResponseEntity.ok(classroomService.getClassroomsByGradeId(gradeId));
     }
 
-    @PostMapping
-    public ResponseEntity<Classroom> createClassroom(@RequestBody Classroom classroom) {
-        Classroom savedClassroom = classroomService.save(classroom);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedClassroom);
+    @PostMapping("/{gradeId}/classrooms")
+    public ResponseEntity<Map<String, String>> createClassroom(@PathVariable Long gradeId, @RequestBody CreateClassroomRequest request) {
+        request.setGradeId(gradeId);
+        classroomService.createClassroom(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Classroom created successfully"));
     }
 
     @PutMapping("/{id}")

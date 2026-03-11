@@ -3,7 +3,13 @@ package com.example.backend.services;
 import com.example.backend.dto.auth.ChangePasswordDTO;
 import com.example.backend.dto.auth.LoginDTO;
 import com.example.backend.dto.auth.LoginResponseDTO;
+import com.example.backend.exceptions.UserNotFoundException;
+import com.example.backend.models.School;
+import com.example.backend.models.SchoolAdmin;
+import com.example.backend.models.Teacher;
 import com.example.backend.models.User;
+import com.example.backend.repository.SchoolAdminRepository;
+import com.example.backend.repository.TeacherRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.security.CustomUserDetails;
 import jakarta.servlet.http.Cookie;
@@ -23,13 +29,19 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TeacherRepository teacherRepository ;
+    private final SchoolAdminRepository schoolAdminRepository ;
 
     public AuthService(AuthenticationManager authenticationManager, 
                        UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       TeacherRepository teacherRepository,
+                       SchoolAdminRepository schoolAdminRepository) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.teacherRepository = teacherRepository;
+        this.schoolAdminRepository = schoolAdminRepository;
     }
 
     public LoginResponseDTO login(LoginDTO loginDTO, HttpServletRequest request) {
@@ -90,4 +102,21 @@ public class AuthService {
         sessionCookie.setMaxAge(0);
         response.addCookie(sessionCookie);
     }
-}
+    public Teacher findCurrentTeacher() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication() ;
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal() ;
+        String email = userDetails.getEmail() ;
+        Teacher teacher = teacherRepository.findByUserEmail(email).orElseThrow(
+            () -> new UserNotFoundException("User not found")
+        );
+        return teacher ;
+    }
+    public SchoolAdmin findCurrentSchoolAdmin() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication() ;
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal() ;
+        String email = userDetails.getEmail() ;
+        SchoolAdmin schoolAdmin = schoolAdminRepository.findByUserEmail(email).orElseThrow(
+            () -> new UserNotFoundException("User not found")
+        );
+        return schoolAdmin ;
+}}

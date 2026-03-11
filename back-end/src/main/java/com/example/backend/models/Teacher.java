@@ -11,9 +11,6 @@ public class Teacher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String subject;
-
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
     private User user;
@@ -30,7 +27,7 @@ public class Teacher {
     )
     private List<Classroom> classrooms;
 
-    @OneToMany(mappedBy = "teacher")
+    @OneToMany(mappedBy = "teacher" , cascade = CascadeType.ALL)
     private List<Subject> subjects;
 
     @OneToMany(mappedBy = "teacher")
@@ -39,9 +36,7 @@ public class Teacher {
     // Constructors
     public Teacher() {}
 
-    public Teacher(String subject) {
-        this.subject = subject;
-    }
+
 
     // Getters and Setters
     public Long getId() {
@@ -50,14 +45,6 @@ public class Teacher {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
     }
 
     public User getUser() {
@@ -87,6 +74,11 @@ public class Teacher {
     public List<Subject> getSubjects() {
         return subjects;
     }
+    public void addSubject(Subject subject) {
+        this.subjects.add(subject) ;
+        subject.setTeacher(this);
+    }
+
 
     public void setSubjects(List<Subject> subjects) {
         this.subjects = subjects;
